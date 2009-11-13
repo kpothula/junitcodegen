@@ -1,0 +1,61 @@
+<project name="JUnitCodeGen" basedir="." default="info">
+
+	<property environment="myenv" />
+
+	<path id="compile.path">
+		<pathelement location="${myenv.JAVA_HOME}/lib/tools.jar" />
+	</path>
+
+	<path id="junit.path">
+		<pathelement location="lib/junit-4.0.jar" />
+	</path>
+
+	<target name="info">
+		<echo>
+			${myenv.JAVA_HOME}
+		</echo>
+	</target>
+
+	<target name="echoall">
+		<echoproperties />
+	</target>
+
+	<target name="clean">
+		<delete dir="bin" />
+	</target>
+
+	<target name="compile" description="...">
+		<mkdir dir="bin" />
+		<javac srcdir="src" destdir="bin" classpath="compile.path" debug="on" />
+	</target>
+
+	<target name="package" depends="compile" description="...">
+		<mkdir dir="lib" />
+		<jar destfile="lib/${ant.project.name}.jar" basedir="bin">
+		</jar>
+	</target>
+
+	<target name="testrun" depends="package" description="...">
+		<mkdir dir="api-docs" />
+		<javadoc packagenames="*" doclet="in.kp.doclet.sample.ListClass" docletpath="./lib/${ant.project.name}.jar" verbose="false">
+			<packageset dir="src" defaultexcludes="yes">
+				<include name="in/**" />
+			</packageset>
+		</javadoc>
+	</target>
+
+	<target name="run" depends="package" description="...">
+		<mkdir dir="unittest" />
+		<javadoc packagenames="*" destdir="unittest" doclet="in.kp.doclet.JUnitCodeGen" docletpath="./lib/${ant.project.name}.jar" verbose="false">
+			<packageset dir="src" defaultexcludes="yes">
+				<include name="in/**" />
+			</packageset>
+		</javadoc>
+	</target>
+
+	<target name="verify" description="...">
+		<mkdir dir="unittestbin" />
+		<javac srcdir="unittest" destdir="unittestbin" classpathref="junit.path" debug="on" />
+	</target>
+
+</project>

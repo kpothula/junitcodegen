@@ -7,7 +7,7 @@ import java.util.List;
 public class JavaCodeGenerator {
     private ClassBean classBean;
     private JavaCodeWriter out;
-    
+
     public static void generate(ClassBean pClassBean, JavaCodeWriter pOut) throws IOException {
         JavaCodeGenerator g = new JavaCodeGenerator(pClassBean, pOut);
         g.generate();
@@ -18,7 +18,7 @@ public class JavaCodeGenerator {
         classBean = pClassBean;
         out = pOut;
     }
-
+    
     private void generate() throws IOException {
         writeHeader();
         writeClassDef();
@@ -56,27 +56,33 @@ public class JavaCodeGenerator {
     }
 
     private void writeBody() throws IOException {
-        out.print('{');
-        out.println();
+        out.println("{");
+        out.startIndent();
         writeMethods();
-        out.print('}');
+        out.endIndent();
+        out.println("}");
     }
     
     private void writeMethods() throws IOException {
         List<MethodBean> methods = classBean.getMethods();
-        for (Iterator iterator = methods.iterator(); iterator.hasNext();) {
+        for (Iterator<MethodBean> iterator = methods.iterator(); iterator.hasNext();) {
             MethodBean methodBean = (MethodBean) iterator.next();
             writeMethod(methodBean);
             out.println();
         }
     }
     private void writeMethod(MethodBean methodBean) throws IOException {
-        out.println();
         out.println(methodBean.getAnnotation());
         out.print(methodBean.getModifiers());
         out.print(methodBean.getName());
         out.println("(){");
-        out.print(methodBean.getBody());
-        out.print('}');
+        out.startIndent();
+        List<String> bodyCode = methodBean.getBody();
+        for (Iterator iterator = bodyCode.iterator(); iterator.hasNext();) {
+			String codeLine = (String) iterator.next();
+			out.println(codeLine);
+		}
+        out.endIndent();
+        out.println("}");
     }
 }

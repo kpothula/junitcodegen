@@ -1,6 +1,7 @@
 package in.kp.doclet;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MethodBean {
     private String name;
@@ -8,7 +9,7 @@ public class MethodBean {
     private String annotation;
     private ArrayList<VariableBean> params = new ArrayList<VariableBean>();
     private ArrayList<Class> exceptions = new ArrayList<Class>();
-    private String body;
+    private List<String> body = new ArrayList<String>();
     private ArrayList<String> methodImports = new ArrayList<String>();
     public MethodBean() {
     }
@@ -40,17 +41,20 @@ public class MethodBean {
     public void setExceptions(ArrayList<Class> pExceptions) {
         exceptions = pExceptions;
     }
-    public String getBody() {
+    public  List<String> getBody() {
         return body;
     }
-    public void setBody(String pBody) {
-        body = pBody;
+    public void addToBody(String pLine) {
+        body.add(pLine);
     }
     public ArrayList<String> getMethodImports() {
         return methodImports;
     }
     public void setMethodImports(ArrayList<String> pMethodImports) {
         methodImports = pMethodImports;
+    }
+    public void addMethodImport(String pMethodImport) {
+        methodImports.add(pMethodImport);
     }
     public String getAnnotation() {
         return annotation;

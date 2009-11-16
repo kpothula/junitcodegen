@@ -8,6 +8,7 @@
 
 	<path id="junit.path">
 		<pathelement location="lib/junit-4.0.jar" />
+		<pathelement location="lib/${ant.project.name}.jar" />
 	</path>
 
 	<target name="info">
@@ -20,8 +21,11 @@
 		<echoproperties />
 	</target>
 
-	<target name="clean">
+	<target name="clean" description="Cleans all the directories created by build.">
 		<delete dir="bin" />
+		<delete dir="api-docs" />
+		<delete dir="unittest" />
+		<delete dir="unittestbin" />
 	</target>
 
 	<target name="compile" description="...">
@@ -29,10 +33,38 @@
 		<javac srcdir="src" destdir="bin" classpath="compile.path" debug="on" />
 	</target>
 
-	<target name="package" depends="compile" description="...">
+	<target name="package" depends="compile" description="Packages the compiled classes in the bin and places in the lib folder.">
 		<mkdir dir="lib" />
 		<jar destfile="lib/${ant.project.name}.jar" basedir="bin">
 		</jar>
+	</target>
+
+	<target name="run" depends="package" description="Runs the doclet and generates the JUnit Test source code">
+		<mkdir dir="unittest" />
+		<javadoc packagenames="*" destdir="unittest" doclet="in.kp.doclet.JUnitCodeGen" docletpath="./lib/${ant.project.name}.jar" verbose="false">
+			<packageset dir="src" defaultexcludes="yes">
+				<include name="in/**" />
+			</packageset>
+		</javadoc>
+	</target>
+
+	<target name="compiletest" description="Compiles the test sources.">
+		<mkdir dir="unittestbin" />
+		<javac srcdir="unittest" destdir="unittestbin" classpathref="junit.path" debug="on" />
+	</target>
+	
+	<target name="verify" depends="compiletest" description="Verifies the generated Unittest Sources by compiling them.">
+		<junit printsummary="yes" haltonerror="false" >
+			<classpath>
+				<pathelement location="lib/junit-4.0.jar" />
+				<pathelement location="lib/${ant.project.name}.jar" />
+			</classpath>
+			
+			<batchtest fork="yes" todir="./TestReports">
+			    <fileset dir="unittestbin">
+			    </fileset>
+			</batchtest>
+		</junit>
 	</target>
 
 	<target name="testrun" depends="package" description="...">
@@ -42,20 +74,6 @@
 				<include name="in/**" />
 			</packageset>
 		</javadoc>
-	</target>
-
-	<target name="run" depends="package" description="...">
-		<mkdir dir="unittest" />
-		<javadoc packagenames="*" destdir="unittest" doclet="in.kp.doclet.JUnitCodeGen" docletpath="./lib/${ant.project.name}.jar" verbose="false">
-			<packageset dir="src" defaultexcludes="yes">
-				<include name="in/**" />
-			</packageset>
-		</javadoc>
-	</target>
-
-	<target name="verify" description="...">
-		<mkdir dir="unittestbin" />
-		<javac srcdir="unittest" destdir="unittestbin" classpathref="junit.path" debug="on" />
 	</target>
 
 </project>

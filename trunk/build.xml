@@ -28,7 +28,7 @@
 		<delete dir="unittestbin" />
 	</target>
 
-	<target name="compile" description="...">
+	<target name="compile" description="Compiles the sources">
 		<mkdir dir="bin" />
 		<javac srcdir="src" destdir="bin" classpath="compile.path" debug="on" />
 	</target>
@@ -54,7 +54,11 @@
 	</target>
 	
 	<target name="verify" depends="compiletest" description="Verifies the generated Unittest Sources by compiling them.">
-		<junit printsummary="yes" haltonerror="false" >
+		<java classname="org.junit.runner.JUnitCore" classpathref="junit.path" dir="unittestbin" fork="true">
+         <arg value="in.kp.doclet.MethodBeanTest"/>
+        </java>
+	<!--
+		<junit printsummary="yes" haltonerror="false" fork="yes">
 			<classpath>
 				<pathelement location="lib/junit-4.0.jar" />
 				<pathelement location="lib/${ant.project.name}.jar" />
@@ -65,9 +69,10 @@
 			    </fileset>
 			</batchtest>
 		</junit>
+	-->
 	</target>
 
-	<target name="testrun" depends="package" description="...">
+	<target name="testrun" depends="package" >
 		<mkdir dir="api-docs" />
 		<javadoc packagenames="*" doclet="in.kp.doclet.sample.ListClass" docletpath="./lib/${ant.project.name}.jar" verbose="false">
 			<packageset dir="src" defaultexcludes="yes">

@@ -49,6 +49,7 @@ public class JavaCodeGenerator {
         out.println();
     }
     private void writeClassDef() throws IOException {
+        out.println(CodeGenConstants.CLASS_COMMENT);
         out.print(classBean.getModifiers());
         out.print(" class ");
         out.print(classBean.getName());
@@ -72,6 +73,7 @@ public class JavaCodeGenerator {
         }
     }
     private void writeMethod(MethodBean methodBean) throws IOException {
+        out.println(CodeGenConstants.METHOD_COMMENT);
         out.println(methodBean.getAnnotation());
         out.print(methodBean.getModifiers());
         out.print(methodBean.getName());

@@ -34,6 +34,13 @@ public class ClassBean {
         imports = pImports;
         implementedClasses = pImplementedClasses;
     }
+        
+    public boolean hasMethods() {
+    	if(methods.size() > 0)
+    		return true;
+    	else
+    		return false;
+    }
 
     /**
      * @return the name

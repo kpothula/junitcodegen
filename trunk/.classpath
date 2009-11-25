@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" output="unittestbin" path="unittest"/>
+	<classpathentry kind="src" output="bin-anttask" path="src-anttask"/>
+	<classpathentry kind="src" output="bin-unittest" path="unittest"/>
 	<classpathentry kind="lib" path="lib/junit-4.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="JAVA_HOME/lib/tools.jar"/>
+	<classpathentry kind="var" path="ANT_HOME/lib/ant.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

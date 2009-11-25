@@ -81,4 +81,17 @@
 		</javadoc>
 	</target>
 
+	<target name="release" depends="compile" description="Release a version of jar." if="version">
+		<jar destfile="${ant.project.name}-${version}.jar" basedir="bin">
+			<manifest>
+			      <!-- Who is building this jar? -->
+			      <attribute name="Built-By" value="${user.name}"/>
+			      <!-- Information about the program itself -->
+			      <attribute name="Implementation-Vendor" value="GoogleCode junitcodegen"/>
+			      <attribute name="Implementation-Title" value="JUnitCodeGen"/>
+			      <attribute name="Implementation-Version" value="${version}"/>
+			</manifest>
+		</jar>
+	</target>
+	
 </project>
